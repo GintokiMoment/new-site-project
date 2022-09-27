@@ -1,0 +1,21 @@
+body{
+	font-family: verdana;
+	padding: 30px;
+}
+
+p,li{
+	line-height: 1.7em;
+	color:#242331 ;
+}
+
+h1{
+	color: #A27035;
+}
+
+h3{
+	color:#DDCA7D;
+}
+
+a{
+	color: #B88B4A;
+}
