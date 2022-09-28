@@ -3,7 +3,7 @@
 $pageTitle = "Welcome to my Website!";
 $pageDescription = "This website is to detail my hobbies, some art, and some other fun things.";
 
-require("includes/header.inc.php");
+require("../includes/header.inc.php");
 ?>
 		<main>
 
@@ -29,6 +29,6 @@ require("includes/header.inc.php");
 			</div>
 		</aside>
 <?php
-require("includes/footer.inc.php");
+require("../includes/footer.inc.php");
 ?>
 
