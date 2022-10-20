@@ -36,6 +36,8 @@ require("includes/header.inc.php");
 
 <?php
 
+echo(po);
+
 if(!empty ($sideBar) ) {
 	require("includes/" . $sideBar);
 }
