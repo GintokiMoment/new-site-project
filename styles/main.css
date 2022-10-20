@@ -58,6 +58,7 @@ footer{
 main{
 	float:left;
 	width:70%;	
+	color: yellow;
 }
 
 aside{
@@ -71,6 +72,10 @@ aside li{
 
 #content{
 	overflow: auto;
+}
+
+#content.single-column main {
+	width: 100;
 }
 
 .content-frame{
@@ -126,6 +131,7 @@ footer a{
   width:100%;
   border: 2px solid #333333;
 }
+
 
 /*MEDIA QUERIES*/
 @media all and (max-width : 800px) {

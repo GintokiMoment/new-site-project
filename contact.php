@@ -1,11 +1,14 @@
 <?php
+require_once("includes/config.inc.php");
+
 
 $pageTitle = "Contact me!";
 $pageDescription = "If you have any further questions, concerns, or business inquiries, let me know!";
+$sideBar = "hobbies-sidebar.inc.php";
 
 require("includes/header.inc.php");
 ?>
-<script src="js/contact-form.js"></script>
+<script src="<?php echo(PROJECT_DIR); ?>js/contact-form.js"></script>
 		<main>
 
 			<div class="content-frame">
@@ -54,20 +57,11 @@ require("includes/header.inc.php");
 			</div>
 			
 		</main>
-		<aside>
-			<div class="content-frame">
-				<h3>My Hobbies</h3>
-				<ol>
-					<li>Music</li>
-					<li>Guitar</li>
-					<li>Coding</li>
-				</ol>
-				<div class="img-container">
-					<img src="images/Lighthouse.jpg" alt="A lighthouse">
-				</div>
-			</div>
-		</aside>
 <?php
+
+if(!empty ($sideBar) ) {
+	require("includes/" . $sideBar);
+}
 require("includes/footer.inc.php");
 ?>
 
