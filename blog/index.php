@@ -1,5 +1,9 @@
 <?php
 require_once("../includes/config.inc.php");
+require_once("../includes/PageDataAccess.inc.php");
+
+$pda = new PageDataAccess(getDBLink());
+$activePages = $pda -> getPageList();
 
 $pageTitle = "Welcome to my Website!";
 $pageDescription = "This website is to detail my hobbies, some art, and some other fun things.";
@@ -12,8 +16,7 @@ require("../includes/header.inc.php");
 			<div class="content-frame">
 				
 				<h1>Blog</h1>
-				<p>This page will display a list of recent blog posts</p>
-
+				<?php echo(createBlogList($activePages)); ?>
 			</div>
 			
 		</main>
@@ -25,5 +28,25 @@ if(!empty ($sideBar) ) {
 }
 
 require("../includes/footer.inc.php");
+
+// wraps the blog pages in an unordered list
+function createBlogList($pages){
+
+	$html = "<ul class=\"blog-list\">";
+
+	foreach ($pages as $p) {
+		$html .= "<li>";
+		$html .= 	"<a href=\"blog-post.php?pageId=" . $p['pageId'] . "\">";
+		$html .= 		$p['title'];
+		$html .= 	"</a>";
+		$html .= "</li>";
+		
+	}
+
+	$html .= "</ul>";
+	return $html;
+
+}
+
 ?>
 

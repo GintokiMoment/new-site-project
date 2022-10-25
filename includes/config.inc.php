@@ -9,17 +9,25 @@ if($_SERVER['SERVER_NAME'] == 'localhost') {
     define("IMAGES_DIR", PROJECT_DIR . "images/");
     define("DEBUG_MODE", TRUE);
     define("ADMIN_EMAIL", "gvigil000@gmail.com");
+    define("DB_HOST", "localhost");
+    define("DB_USER", "root");
+    define("DB_PASSWORD", "");
+    define("DB_NAME", "my-new-site");
 } else {
         #live site
     define("PROJECT_DIR", "/");
     define("IMAGES_DIR", PROJECT_DIR . "images/");
     define("DEBUG_MODE", FALSE);
     define("ADMIN_EMAIL", "gvigil000@gmail.com");
+    define("DB_HOST", "xxxxxx");
+    define("DB_USER", "xxxxxx");
+    define("DB_PASSWORD", "xxxxxx");
+    define("DB_NAME", "my-new-site");
 }
 
 # if debug mode, we want to display in browser..
 
-if(DEBUG_MODE) {
+if($DEBUG_MODE) {
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
@@ -55,13 +63,13 @@ function customErrorHandler($errno, $errstr, $errfile, $errline){
 	// In the future we may want to include many more details in our 
 	// custom error message
 
-	if(DEBUG_MODE){
+	if($DEBUG_MODE){
 		// in debug mode we display all details of the error in the browser
 		echo($errorMsg);
 	}else{
 		// when not debugging (on the live site) we don't want users to see ugly error messages
 		// so instead, we get an email with the gory details and redirect users to our friendly error page.
-		sendEmail(ADMIN_EMAIL, "WEBSITE ERROR!", $errorMsg . getAllSuperGlobals());
+		sendEmail($ADMIN_EMAIL, "WEBSITE ERROR!", $errorMsg . getAllSuperGlobals());
 		header("Location: " . PROJECT_DIR . "error.php");
 		exit();
 	}
@@ -84,4 +92,23 @@ function getAllSuperGlobals(){
 	}
 
 	return $str;
+}
+
+#create bmthey
+
+$link = null;
+
+## Connection to the database..
+
+function getDBLink() {
+
+    global $link;
+
+    if($link == null) {
+        $link = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME); 
+
+        if (!$link) {
+            throw new Exception(mysqli_connect_error());
+        }
+    }
 }

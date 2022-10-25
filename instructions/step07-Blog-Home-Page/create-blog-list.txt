@@ -1,0 +1,17 @@
+// wraps the blog pages in an unordered list
+function createBlogList($pages){
+
+	$html = "<ul class=\"blog-list\">";
+
+	foreach ($pages as $p) {
+		$html .= "<li>";
+		$html .= 	"<a href=\"blog-post.php?pageId=" . $p['pageId'] . "\">";
+		$html .= 		$p['title'];
+		$html .= 	"</a>";
+		$html .= "</li>";
+		
+	}
+
+	$html .= "</ul>";
+	return $html;
+}		

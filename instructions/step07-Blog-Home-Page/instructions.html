@@ -1,0 +1,157 @@
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Blog Home Page</title>
+	<link rel="stylesheet" type="text/css" href="../styles.css">
+</head>
+<body>
+	<h1>Blog Home Page</h1>
+	<h3>Pre-Reqs</h3>
+	<ul>
+		<li><b>Complete at least the first step in the OOPhp assignment</b></li>
+		<li>Understanding of PHP and MySQL (and how they work together)</li>
+		<li>Understanding of PHPMyAdmin</li>
+		<li>Understanding of OOP, Constructors and Classes in PHP</li>
+		<li>Understanding of <b>optional parameters</b></li>
+	</ul>
+
+	<p>
+		In this step we are going to work on the blog pages for the site.
+		The blog pages will get their content from the database, so we'll start off by setting it up in PHPMyAdmin.
+		We'll also have to create a few other files before we start on the blog home page.
+		Up until now, we have used the procedural style of programming in PHP.
+		Now we'll start using classes and objects in our code.
+		(I debated on whether or not to use inheritance right away, but decided not to, just to keep things simple).
+	</p>
+
+	<h3>Setting Up The Database</h3>
+	<ol>
+		<li>Open PHPMyAdmin and create a new database called <b>my-new-site</b></li>
+		<li>
+			In the 'my-new-site' databse, run the SQL statements <a href="SQL.txt">here</a>.
+			You should be able to copy the entire contents of the file and run all the queries at once.
+			The SQL queries will create two tables, <b>pages</b> and <b>categories</b>.
+			They also insert some 'dummy' data into the database for us.
+			We'll discuss the tables and columns in class.
+			Note that the 'path' column in the 'pages' is a bit of a mystery now, but it will be used to greatly improve our SEO in the future.
+			Note that the SQL script adds two 'test' blog posts, just to give us something to work with.
+		</li>
+	</ol>
+	<h3>Add code to the config file to connect to the database</h3>
+	<p>
+		We'll add some code that connects to the database.
+		And since a few of our pages will use this code, we'll put it in the config file.
+	</p>
+	<ol>
+		<li>
+		Add the following constants to the config file: <b>DB_HOST, DB_USER, DB_PASSWORD, DB_NAME</b>.
+		Note that they will be set to different values on the dev and live environments.
+		The code should look like <a href="screen-shots/1-db-settings.png">this</a>.
+		For the dev settings, you should be able to use the same values for each of the constants that are in the screen shot.
+		Later, we'll set up the database on the live site, at that time you can update the values for connecting the the live database
+		</li>
+		<li>
+			Add <a href="screen-shots/2-db-link-function.png">this</a> code to the bottom of the config file.
+			We'll discuss this code in class, but for now just note that the function will initialize the <b>$link</b> variable (which represents our connection to the database),
+			if it has not already been initialized.
+		</li>
+	</ol>
+	<h3>Create the PageDataAccess class</h3>
+	<p>
+		Note that our book duplicates a lot of code when it comes to accessing the database.
+		We are going to take a turn toward object-oriented PHP now.
+		Instead of putting SQL queries directly in our web pages (as the book does),
+		we will put all SQL queries regarding blog pages into a class. 
+		This will make our code more flexible, re-usable, maintainable, modular, and testable.
+		When we add a new page to our site that needs to access the database, we'll use this class rather than duplicate the code in each page.
+	</p>
+	<ol>
+		<li>
+			<p>
+			Create a file in the <b>includes</b> folder called <b>PageDataAccess.inc.php</b>.
+			Note that the file name starts with a capital P, which indicates that this is a class.
+			<a href="page-data-access.txt">This</a> is the code you should put in it.
+			</p>
+			<p>
+			Study this code (maybe I should have forced you to copy it from a screen shot)!
+			If you don't understand any of it, please ask questions in class. 
+			Here are some things for you to note:
+			</p>
+			<ul>
+				<li>
+					There is no closing php tag (<b>?&gt;</b>) because this is an include file.		
+				</li>
+				<li>
+					The constructor function takes a link to the database as a param.
+					This param is used to set the <b>$link</b> instance variable.
+				</li>
+				<li>
+					The <b>getPageList()</b> method has an optional parameter which defaults to true.
+					If this parameter is true, then a WHERE clause is added to the SQL query that the method executes. 
+				</li>
+				<li>
+					The MySQL <b>DATE_FORMAT()</b> function is used to change how the publishedDate column is formatted.
+					Remember that MySQL requires dates to be formatted as <b>yyyy-mm-dd</b>, but we want to present dates on the website as <b>mm/dd/yyyy</b> (the second parameter passed into DATE_FORMAT() is a little strange, you can ask me about it in class).
+				</li>
+				<li>
+					When <b>mysqli_query()</b> is executed, we use the <b>OR</b> keyword to call the handleError() method if the query fails (the handleError() method is defined in the PageDataAccess class).
+					This is a much better approach than simply calling die() as the book does (when you die, your dead).
+					By using handleError() we can do things such as logging the error and redirecting to our friendly error page.
+				</li>
+			</ul>
+			
+			<p>
+			We will test this code in the next page that we create.
+			</p>
+		</li>
+		<li>
+			Create a new folder called <b>tests</b> and put it inside the <b>my-new-site</b> folder.
+		</li>
+		<li>
+			Inside the tests folder, create a file named <b>page-data-access-tests.php</b>
+			Then put <a href="screen-shots/4-test-page.png">this</a> code into the page.
+		</li>
+		<li>
+			Open the <b>page-data-access-tests.php</b> page in the browser, and make sure it's properly fetching the data from the database.
+			Now we have the confidence to know that our data access code is working properly before we use it in the blog home page.
+			This is a very crude form of <b>unit testing</b>.
+		</li>
+	</ol>
+
+	<h3>Hooking up the Blog Home Page</h3>
+	<ol>
+		<li>Open the blog home page (blog/index.php)</li>
+		<li>Add <a href="screen-shots/5-use-page-data-access-in-blog-home-page.png">this</a> code just under the link to the config file.</li>
+		<li>
+			Add <a href="create-blog-list.txt">this</a> function to the bottom of the page (but before the closing php delimiter).
+			<br>Study the function, make sure you understand its parameter, its return value, and the code inside it.	
+		</li>
+		<li>
+			Finally, let's invoke the function we just created and echo out the html string that it returns.
+			The PHP code should go just under the the H1 tag on the page.
+			You can remove the P tag that is currently under the H1 tag.
+			Your code should look like <a href="screen-shots/7-calling-createBlogList.png">this</a>.
+		</li>
+		<li>
+			Open the blog home page in the browser.
+			Note that the blog post title is a hyperlink to a page that we have not yet created.
+			We'll create that page in the next step of the project.
+			Also note that the html code generated by createBlogList() includes links that have query string variables in the URL. The variable is named <b>pageId</b> and it's value is the associated blog post id in the pages table.  
+			Finally, note that URL query string variables are also called <b>url parameters</b>.
+		</li>
+	</ol>
+	<h3>Follow Up Questions:</h3>
+	<ol>
+		<li>How do you create a constructor function in PHP 7?</li>
+		<li>Your book uses <b>OR die(mysqli_error())</b> to handle database errors. What's the problem with this approach?</li>
+		<li>How does the getDBLink() function ensure that no matter how many times it's invoked, it will only ever create a link/connection one time?</li>
+		<li>What is the purpose of the DATE_FORMAT() function in MySQL?</li>
+		<li>Explain the difference between this date format specifier: <b>%m/%e/%Y</b> and this one <b>%m/%d/%Y</b></li>
+		<li>What is the purpose of the optional parameter in the getPageList() method?</li>
+		<li>Describe the $pageList variable that gets returned from the getPageList() method.</li>
+		<li>What is an XSS attack? And how can you prevent one from happening?</li>
+	</ul>
+</body>
+</html>
+
+
