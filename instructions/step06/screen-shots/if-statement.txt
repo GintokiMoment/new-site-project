@@ -1,0 +1,29 @@
+
+if($_SERVER['REQUEST_METHOD'] == "POST"){
+	// Get the data entered by the user
+	$firstName = $_POST['txtFirstName'] ?? "";	
+	$lastName = $_POST['txtLastName'] ?? "";	
+	$email = $_POST['txtEmail'] ?? "";	
+	$comments = $_POST['txtComments'] ?? "";
+
+	if(validateContactData($firstName, $lastName, $email, $comments)){
+
+		// If the data is valid, then put it into a single string to send as an email 
+		$msg = "Name: $firstName $lastName <br>";
+		$msg .= "Email: $email <br>";
+		$msg .= "Comments: $comments";  
+		
+		sendEmail(ADMIN_EMAIL, "Contact Form", $msg);
+		header("Location: " . PROJECT_DIR . "contact-confirmation.php");
+		exit();	
+		
+	}else{
+
+		// Foul play suspected (the client-side validation has been bypassed)!
+		$msg = getAllSuperGlobals(); 
+		sendEmail(ADMIN_EMAIL, "Security Warning!", $msg);
+		header("Location: " . PROJECT_DIR . "error.php");
+		exit();	
+	}
+
+}

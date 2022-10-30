@@ -1,0 +1,93 @@
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Contact Page</title>
+	<link rel="stylesheet" type="text/css" href="../styles.css">
+</head>
+</head>
+<body>
+	<h1>Contact Page</h1>
+	<p>
+		In this step we will incorporate server-side input validation into the form on the contact page.
+		Here's the algorithm we'll follow:
+	</p>	
+	<ol>
+		<li>Get the data entered by the user (from the $_POST super-global array)</li>
+		<li>
+			If the data is valid:
+			<ol>
+				<li>Send an email to the site adminstrator with the data.</li>
+				<li>Redirect to a page that confirms to the user that the contact information has been sent.</li>
+			</ol>
+		</li>
+		<li>
+			If the data is NOT valid:
+			<ol>
+				<li>
+					Send an email to the site admin notifying of a security issue
+			   		(if the data is not valid, then the JavaScript validation code has been bypassed)!!!!!
+				</li>
+			</ol>
+		</li>
+	</ol>
+	<p>
+		To complete this task, follow these steps:
+	</p>
+	<ol>
+		<li>Open the contact page in your editor.</li>
+		<li>
+			Add <a href="screen-shots/2-validate-function.png">this</a> function to the PHP code, put it just under the link to the footer.inc.php file (although it doesn't really matter where you put it, just so long as it's somewhere within the PHP delimiters).
+			Make sure you understand the code. It checks to make sure that none of the parameters are empty.
+			Then it uses the filter_var() function to validate the email address.
+			Note that validateContactData() returns true if the user input is valid. 
+			If it returns false, then we should suspect that there has been some sort of foul play becuase the client-side code (JavaScript validation code) should have prevented the user from entering invalid data.
+			So it's likely that a spam bot is sending POST requests to this page and bypassing the client-side validation.
+			Whenever you suspect foul play, you want to capture as much data as you can about the nature of the request.
+			We'll do that in the next step.
+		</li>
+		<li>
+			Add <a href="screen-shots/1-if-statement.png" target="_blank">this</a> code to the PHP code at the top of the contact page, 
+			just after the $sideBar variable and before the line that links to the header.inc.php file.
+			Note the following:
+			<ol>
+				<li>It checks to see if the contact form was submitted (posted).</li>
+				<li>If so, it uses the <b>null coalescing operator (??)</b> to extract the user input from the $_POST super global array.</li>
+				<li>It checks to make sure the input is valid (by passing it into the validateContactData() function).</li>
+				<li>If the input is valid, it constructs a message and sends it in an email to the site administrator (which is a constant defined in the config.inc.php file). Then it uses the <b>header()</b> PHP function to redirect to a confirmation page, which we have not yet created.</li>
+				<li>If the input is not valid, we collect as much data from the super global arrays as possible (by calling getAllSuperGlobals(), which is defined in the config file) and sends a warning message to the site administrator.</li>
+			</ol>
+		</li>
+		
+		<li>
+			Create a page named <b>contact-confirmation.php</b> and put it in the <b>my-new-site</b> folder.
+			You can copy code from the home page and then make the appropriate updates, just as we did when we created error.php.
+			The page should say something like this: <b>Thank you for contacting me, I'll get back to you as soon as possible.</b>
+		</li>
+		<li>
+			Test the page on your dev server. Note that you won't get any emails because your dev server is not set up as a mail server.
+			But you should see the confirmation page after you submit the form. If you want to test that the error page is appearing as it should, 
+			you could disable the JavaScript validation code temporarily 
+			(there are other ways we could test this too, maybe we can discuss them in class.)
+		</li>
+	</ol>
+	<!--
+	<h3>Update to the sendEmail() function</h3>
+	<p>I went back and made some changes to the sendEmail() function (in the config file):</p>
+	<ol>
+		<li>
+			I updated code in sendEmail to allow html emails, and to allow you attach various headers to the emails that are sent.
+		</li>
+		<li>
+			<a href="screen-shots/send-email-updated.txt" target="_blank">Here's sendEmail()</a>. 
+			Seems weird how you have to use single and double quotes when concatenating the string, but that's how it works.
+			You can read more about about sending emails from PHP in your book!
+		</li>
+		<li>
+			<a href="screen-shots/5-update-to-contact.png">Here's the change to contact.php (notice the last param on line 22)</a>
+		</li>
+	</ol>
+	-->
+</body>
+</html>
+
+

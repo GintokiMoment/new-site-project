@@ -2,8 +2,11 @@
 require_once("../includes/config.inc.php");
 require_once("../includes/PageDataAccess.inc.php");
 
+// var_dump(getDBLink());
+// die();
 $pda = new PageDataAccess(getDBLink());
 $activePages = $pda -> getPageList();
+
 
 $pageTitle = "Welcome to my Website!";
 $pageDescription = "This website is to detail my hobbies, some art, and some other fun things.";
@@ -14,7 +17,6 @@ require("../includes/header.inc.php");
 		<main>
 
 			<div class="content-frame">
-				
 				<h1>Blog</h1>
 				<?php echo(createBlogList($activePages)); ?>
 			</div>

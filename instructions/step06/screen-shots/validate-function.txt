@@ -1,0 +1,18 @@
+
+function validateContactData($firstName, $lastName, $email, $comments){
+	
+	// Make sure that none to the inputs are empty
+	if(empty($firstName) || empty($lastName) || empty($comments) || empty($email)){
+		return false;
+	}
+
+	// Make sure the email entered is a valid one (you may want to look up the
+	// filter_var() function in PHP)
+	if(filter_var($email, FILTER_VALIDATE_EMAIL) === false){
+		return false;
+	}
+
+	return true;
+}
+
+
